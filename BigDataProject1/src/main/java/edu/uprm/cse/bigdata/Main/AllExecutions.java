@@ -27,8 +27,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 
 /**
@@ -45,6 +44,7 @@ public class AllExecutions {
         URI fileUri = URI.create(fileName);
         // get the configuration variable
         Configuration conf = new Configuration();
+        conf.set("mapred.textoutputformat.separator", ",");
         // get a handle the underlying hadoop file system
         FileSystem hdfs = FileSystem.get(fileUri, conf);
         InputStream dataIn = null;
@@ -52,7 +52,7 @@ public class AllExecutions {
         long bytesToSend = 0;
 
 
-        Job job = new Job();
+        Job job = new Job(conf);
         Path path = new Path(fileUri);
         FileInputFormat.addInputPath(job, path);
         job.setJarByClass(AllExecutions.class);
@@ -63,10 +63,32 @@ public class AllExecutions {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        if(job.waitForCompletion(true))
-            System.out.println("First job succeeded");
+        if(job.waitForCompletion(true)) {
+            System.out.println(job.getJobName()+" job succeeded");
+            try {
+                File nf = new File(args[1] + "/WordsOccurrences/Occurrences.csv");
+                FileReader fr = new FileReader(new File(args[1] + "/WordsOccurrences/part-r-00000"));
+                FileInputStream fis = new FileInputStream(new File(args[1] + "/WordsOccurrences/part-r-00000"));
+                BufferedReader bfr = new BufferedReader(fr);
+                FileWriter fw = new FileWriter(nf);
+                fw.write("Keywords,Occurrences \n");
+                String line = bfr.readLine();
+                while (line != null) {
+                    fw.write(line+"\n");
+                    line = bfr.readLine();
+                }
+                bfr.close();
+                fw.close();
+            }catch(Exception e){
+                System.out.println("Error with file");
+
+            }
+
+
+
+        }
         else
-            System.out.println("First job failed");
+            System.out.println(job.getJobName()+" job failed");
 
         Job secondJob = new Job();
         FileInputFormat.addInputPath(secondJob, path);
@@ -79,9 +101,9 @@ public class AllExecutions {
         secondJob.setOutputValueClass(IntWritable.class);
 
         if(secondJob.waitForCompletion(true))
-            System.out.println("Second job succeeded");
+            System.out.println(secondJob.getJobName()+" job succeeded");
         else
-            System.out.println("Second job failed");
+            System.out.println(secondJob.getJobName()+" job failed");
 
         Job thirdJob = new Job();
         FileInputFormat.addInputPath(thirdJob, path);
@@ -94,9 +116,9 @@ public class AllExecutions {
         thirdJob.setOutputValueClass(LongWritable.class);
 
         if(thirdJob.waitForCompletion(true))
-            System.out.println("Third job succeeded");
+            System.out.println(thirdJob.getJobName()+" job succeeded");
         else
-            System.out.println("Third job failed");
+            System.out.println(thirdJob.getJobName()+" job failed");
 
         Job fourthJob = new Job();
         FileInputFormat.addInputPath(fourthJob, path);
@@ -109,9 +131,9 @@ public class AllExecutions {
         fourthJob.setOutputValueClass(Text.class);
 
         if(fourthJob.waitForCompletion(true))
-            System.out.println("Fourth job succeeded");
+            System.out.println(fourthJob.getJobName()+" job succeeded");
         else
-            System.out.println("Fourth job failed");
+            System.out.println(fourthJob.getJobName()+" job failed");
 
         Job fifthJob = new Job();
         FileInputFormat.addInputPath(fifthJob, path);
@@ -124,9 +146,9 @@ public class AllExecutions {
         fifthJob.setOutputValueClass(Text.class);
 
         if(fifthJob.waitForCompletion(true))
-            System.out.println("Fifth job succeeded");
+            System.out.println(fifthJob.getJobName()+" job succeeded");
         else
-            System.out.println("Fifth job failed");
+            System.out.println(fifthJob.getJobName()+" job failed");
 
         Job sixthJob = new Job();
         FileInputFormat.addInputPath(sixthJob, path);
@@ -139,11 +161,11 @@ public class AllExecutions {
         sixthJob.setOutputValueClass(Text.class);
 
         if(sixthJob.waitForCompletion(true)) {
-            System.out.println("Sixth job succeeded");
+            System.out.println(sixthJob.getJobName()+" job succeeded");
             System.exit(0);
         }
         else {
-            System.out.println("Sixth job failed");
+            System.out.println(sixthJob.getJobName()+" job failed");
             System.exit(1);
         }
     }
