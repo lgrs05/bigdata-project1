@@ -23,7 +23,7 @@ public class ScreenNamesSetMapper extends Mapper<LongWritable, Text, Text, LongW
             Status status = TwitterObjectFactory.createStatus(rawTweet);
             String screenName = status.getUser().getScreenName();
             long userId = status.getUser().getId();
-            context.write(new Text(screenName), new LongWritable(userId));
+            context.write(new Text(screenName), new LongWritable(1));
 
         }
         catch(TwitterException e){

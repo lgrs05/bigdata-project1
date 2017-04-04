@@ -17,12 +17,9 @@ public class RetweetsReducer extends Reducer<Text, Text, Text, Text> {
 
         String ids = "";
         for(Text value : values)
-            if(value.toString().compareTo(key.toString()+"n")==0)
-                ids += "Not retweeted";
-            else
-                ids += " "+ value.toString();
+            ids += " "+ value.toString();
 
-            context.write(key, new Text(ids));
+        context.write(key, new Text(ids));
 
 
     }

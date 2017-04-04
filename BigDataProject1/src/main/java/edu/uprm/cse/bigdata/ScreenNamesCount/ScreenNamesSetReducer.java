@@ -12,12 +12,15 @@ import java.util.List;
 
 
 public class ScreenNamesSetReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
-    List<LongWritable> list = new ArrayList<LongWritable>();
+
 
     @Override
     protected void reduce(Text key, Iterable<LongWritable> values, Context context)
             throws IOException, InterruptedException {
-        context.write(key, values.iterator().next());
+        int c =0;
+        for(LongWritable value: values)
+            c++;
+        context.write(key, new LongWritable(c));
     }
 
 }

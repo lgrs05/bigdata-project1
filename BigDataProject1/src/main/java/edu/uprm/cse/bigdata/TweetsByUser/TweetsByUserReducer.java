@@ -17,7 +17,7 @@ public class TweetsByUserReducer extends Reducer<Text, Text, Text, Text> {
             count++;
             ids+= " " + value.toString();
         }
-        String result = "Number of tweets: "+ count + ids;
+        String result =  count + ids;
 
 
             context.write(key, new Text(result));

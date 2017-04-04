@@ -5,7 +5,7 @@
   <artifactId>mrsp01</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>mrsp01</name>
+  <name>Project1</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -59,7 +59,7 @@
   </dependencies>
 
   <build>
-    <finalName>mrsp01-${project.version}</finalName>
+    <finalName>project1-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -82,7 +82,7 @@
             <configuration>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>edu.uprm.cse.bigdata.WordsOccurrences.WordsOccurrences</mainClass>
+                  <mainClass>edu.uprm.cse.bigdata.Main.AllExecutions</mainClass>
                 </transformer>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
                 </transformer>

@@ -8,8 +8,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 
 /**
@@ -32,6 +31,9 @@ public class Replies {
         OutputStream dataOut = null;
         long bytesToSend = 0;
         Path path = new Path(fileUri);
+        FileReader fr;
+        BufferedReader bfr;
+        FileWriter fw;
 
         Job fifthJob = new Job();
         FileInputFormat.addInputPath(fifthJob, path);
@@ -42,11 +44,18 @@ public class Replies {
         fifthJob.setReducerClass(RepliesReducer.class);
         fifthJob.setOutputKeyClass(Text.class);
         fifthJob.setOutputValueClass(Text.class);
+        boolean isFinished =fifthJob.waitForCompletion(true);
+        if(isFinished) {
+            System.out.println(fifthJob.getJobName() + " job succeeded");
+
+
+
+        }
 
 
 
 
-        System.exit(fifthJob.waitForCompletion(true) ? 0 : 1);
+        System.exit(isFinished? 0 : 1);
     }
 
 }

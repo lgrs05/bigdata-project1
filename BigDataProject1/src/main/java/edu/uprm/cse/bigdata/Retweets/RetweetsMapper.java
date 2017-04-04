@@ -21,9 +21,6 @@ public class RetweetsMapper extends Mapper<LongWritable, Text, Text, Text> {
             if(status.isRetweet()) {
                 context.write(new Text(Long.toString(status.getRetweetedStatus().getId())), new Text(Long.toString(status.getId())));
             }
-            else {
-                context.write(new Text(Long.toString(status.getId())), new Text(Long.toString(status.getId())+"n"));
-            }
 
 
         }
